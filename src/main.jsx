@@ -5,6 +5,7 @@ import PaginaAdmin from "./components/PaginaAdmin.jsx";
 import PaginaUser from "./components/PaginaUser.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { UsuariosProvider } from './contexts/ListaUsuariosContext';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <UsuariosProvider>
+      <RouterProvider router={router} />
+    </UsuariosProvider>
   </StrictMode>
 );

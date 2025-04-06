@@ -21,6 +21,10 @@ function PaginaUser() {
     return;
   }
 
+  function VoltarLogin() {
+    navigate(-1);
+  }
+
   return (
     <div className="Pagina">
       <div className="Pagina_Titulo">
@@ -43,6 +47,9 @@ function PaginaUser() {
           <span style={{ fontWeight: "Bold" }}>Papel: </span>
           {usuario.role}
         </p>
+        <div className="botoes">
+            <button onClick={VoltarLogin}>Voltar para login</button>
+        </div>
       </div>
     </div>
   );

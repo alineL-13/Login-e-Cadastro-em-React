@@ -2,6 +2,7 @@ import "../styles/Pagina_Admin_User.css";
 import Icon_User from "../assets/Icon_User.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useUsuarios } from '../contexts/ListaUsuariosContext.jsx'
 //import { useSearchParams } from "react-router-dom";
 
 function PaginaAdmin() {
@@ -9,12 +10,17 @@ function PaginaAdmin() {
   /*
   const [searchParams] = useSearchParams();
   const userID = searchParams.get("id");
-  const usuariosArmazenados = JSON.parse(localStorage.getItem("listaUsuarios"));
-  const Usuario = usuariosArmazenados.find((u) => u.id == userID); //encontra o usuario que está conectado*/
+  const usuariosArmazenados = JSON.parse(localStorage.getItem("listaUsuarios")); VERSÃO 1
+
+  const Usuario = usuariosArmazenados.find((u) => u.id == userID); //encontra o usuario que está conectado
   const usuariosArmazenados = JSON.parse(localStorage.getItem("listaUsuarios")); //pega a lista de usuários no localStorage
   const usuario = usuariosArmazenados.find(
     (u) => u.id == sessionStorage.getItem("usuarioLogado")
-  ); //seleciona o usuário logado
+  ); //seleciona o usuário logado VERSÃO 2*/
+
+  const { listaUsuarios, setListaUsuarios } = useUsuarios();
+  const usuario = listaUsuarios.find((u) => u.id == Number(sessionStorage.getItem("usuarioLogado")));
+
   const [cadastrandoFuncionario, setCadastrandoFuncionario] = useState(false);
 
   //formulario
@@ -43,14 +49,25 @@ function PaginaAdmin() {
   };
 
   function CadastrarFuncionario() {
-    if (
-      formNome != "" &&
-      formEmail != "" &&
-      formUser != "" &&
-      formSenha != "" &&
-      formRole != ""
-    ) {
+    if ( formNome == "" || formEmail == "" || formUser == "" || formSenha == "" || formRole == "")
+    {
+      return; //retornar caso algum campo esteja vazio
     }
+    const novoUsuario = {
+      id: listaUsuarios.length + 1,
+      nome: formNome,
+      email: formEmail,
+      user: formUser,
+      senha: formSenha,
+      role: formRole,
+    };
+    setListaUsuarios([...listaUsuarios, novoUsuario]);
+    setFormNome("");
+    setFormEmail("");
+    setFormUser("");
+    setFormSenha("");
+    setFormRole("");
+    setCadastrandoFuncionario(!cadastrandoFuncionario)
   }
 
   return (
@@ -100,7 +117,7 @@ function PaginaAdmin() {
               Cancelar cadastro
             </button>
           )}
-          {cadastrandoFuncionario && <button>Enviar cadastro</button>}
+          {cadastrandoFuncionario && <button onClick={CadastrarFuncionario}>Enviar cadastro</button>}
         </div>
         {cadastrandoFuncionario && (
           <div className="FormularioCadastrarFuncionario">
@@ -110,7 +127,7 @@ function PaginaAdmin() {
                 type="text"
                 placeholder="Insira o nome do novo usuário"
                 value={formNome}
-                onClick={(event) => setFormNome(event.target.value)}
+                onChange={(event) => setFormNome(event.target.value)}
               ></input>
             </div>
             <div className="cadastro_input">
@@ -119,7 +136,7 @@ function PaginaAdmin() {
                 type="text"
                 placeholder="Insira o email do novo usuário"
                 value={formEmail}
-                onClick={(event) => setFormEmail(event.target.value)}
+                onChange={(event) => setFormEmail(event.target.value)}
               ></input>
             </div>
             <div className="cadastro_input">
@@ -128,7 +145,7 @@ function PaginaAdmin() {
                 type="text"
                 placeholder="Insira o user do novo usuário"
                 value={formUser}
-                onClick={(event) => setFormUser(event.target.value)}
+                onChange={(event) => setFormUser(event.target.value)}
               ></input>
             </div>
             <div className="cadastro_input">
@@ -137,7 +154,7 @@ function PaginaAdmin() {
                 type="password"
                 placeholder="Insira o User do novo usuário"
                 value={formSenha}
-                onClick={(event) => setFormSenha(event.target.value)}
+                onChange={(event) => setFormSenha(event.target.value)}
               ></input>
             </div>
             <div className="cadastro_input_radio">

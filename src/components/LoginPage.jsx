@@ -1,6 +1,7 @@
 import "../styles/LoginPage.css";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";  
+import { useUsuarios } from '../contexts/ListaUsuariosContext.jsx'
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -8,21 +9,12 @@ function LoginPage() {
   const [senhaDigitada, setSenhaDigitada] = useState("");
   const [mensagemErro, setMensagemErro] = useState(false);
 
-  // eslint-disable-next-line no-unused-vars
-  const [listaUsuarios, setListaUsuarios] = useState([
-    {
-      id: 1,
-      role: "admin",
-      nome: "Aline Lopes Ferreira",
-      user: "2022101990",
-      email: "alinelopesf13@gmail.com",
-      senha: "1234",
-    },
-  ]);
+  const {listaUsuarios} = useUsuarios();
 
+  
   useEffect(() => {
     localStorage.setItem("listaUsuarios", JSON.stringify(listaUsuarios)); //nome do que vai ser armazenado e JSON da conversão para string da tasks
-  }, [listaUsuarios]);
+  }, []);
 
   useEffect(() => {
     // Limpa o usuário logado ao entrar na página de login
@@ -30,6 +22,7 @@ function LoginPage() {
   }, []);
 
   function conferirUsuario() {
+    /*
     const usuariosArmazenados = JSON.parse(
       localStorage.getItem("listaUsuarios")
     );
@@ -38,7 +31,12 @@ function LoginPage() {
       (u) => u.user == usuarioDigitado && u.senha == senhaDigitada
     );
 
-    return usuarioEncontrado ? usuarioEncontrado : null;
+    return usuarioEncontrado ? usuarioEncontrado : null;*/
+    const usuarioEncontrado = listaUsuarios.find(
+      (u) => u.user == usuarioDigitado && u.senha == senhaDigitada
+    );
+    return usuarioEncontrado || null;
+
   }
 
   function definirEntrada() {
@@ -47,7 +45,7 @@ function LoginPage() {
       setMensagemErro(false);
       Logar(usuario.id, usuario.role);
     } else {
-      // usuário inválido → mostra mensagem de erro
+      console.log(usuario)
       setMensagemErro(true);
     }
   }
