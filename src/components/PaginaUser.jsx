@@ -28,7 +28,7 @@ function PaginaUser() {
   return (
     <div className="Pagina">
       <div className="Pagina_Titulo">
-        <h1>Pagina Admin</h1>
+        <h1>Pagina User</h1>
       </div>
       <div className="Pagina_User">
         <img src={Icon_User} alt="Ícone de usuário" />
